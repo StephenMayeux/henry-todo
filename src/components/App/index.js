@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './style.css';
 
 export default class App extends Component {
@@ -6,7 +6,8 @@ export default class App extends Component {
     super();
     this.state = {
       items: [],
-      todoItem: ''
+      todoItem: '',
+      idx: null
     };
   }
 
@@ -17,57 +18,44 @@ export default class App extends Component {
   }
 
   addTodoItem() {
-    const { items, todoItem } = this.state;
+    const {items, todoItem} = this.state;
+    let idx = Date.now();
     items.push(todoItem);
-    this.setState({
-      items,
-      todoItem: ''
-    });
+    this.setState({items, todoItem: ''});
+  }
+
+  changeState(event) {
+    const test = event.target;
+    console.log(test);
+    this.setState({textDecoration: 'line-through'});
+
   }
 
   renderItems() {
     if (this.state.items.length === 0) {
-      return (
-        <li>Empty List. Add Items</li>
-      );
+      return (<li>Empty List. Add Items</li>);
     }
     return this.state.items.map((item, idx) => {
-      return (
-        <li key={idx}>{item}</li>
-      );
+      return (<li key={idx}>
+        <button id={idx} style={{
+            textDecoration: this.state.textDecoration
+          }} className="strike" onClick={this.changeState.bind(this)}>{item}</button>
+      </li>);
     });
   }
 
   render() {
-    return (
-      <div>
-        <h1 className="app-title">Todo App</h1>
-        <div className="form-wrapper">
-          <input
-            value={this.state.todoItem}
-            onChange={this.handleInputChange.bind(this)}
-            name="todoItem"
-            placeholder="Type Item here"
-          />
-          <button
-            onClick={this.addTodoItem.bind(this)}
-          >
-            Add Item
-          </button>
-        </div>
-        <div>
-          <ul>{this.renderItems()}</ul>
-        </div>
+    return (<div>
+      <h1 className="app-title">Todo App</h1>
+      <div className="form-wrapper">
+        <input value={this.state.todoItem} onChange={this.handleInputChange.bind(this)} name="todoItem" placeholder="Type Item here"/>
+        <button onClick={this.addTodoItem.bind(this)}>
+          Add Item
+        </button>
       </div>
-    );
+      <div>
+        <ul>{this.renderItems()}</ul>
+      </div>
+    </div>);
   }
 }
-
-// const App = () => {
-//   const name = 'Henry';
-//   return (
-//     <h1>{`Hello there, ${name}`}</h1>
-//   );
-// }
-
-// export default App;
